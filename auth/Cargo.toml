@@ -1,0 +1,23 @@
+[package]
+name = "auth"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum.workspace = true
+serde.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+axum-extra.workspace = true
+once_cell.workspace = true
+sqlx.workspace = true
+
+oauth2 = { version = "4" }
+ed25519-compact = { version = "2", features = ["random"] }
+jwt-compact = { version = "0.8.0", features = ["ed25519-compact"] }
+rand = "0.8.5" 
+argon2 = "0.5.2"
+reqwest = { version = "0.11.22", default-features = false, features = ["json", "rustls-tls", "hyper-rustls"] }
+serde_json = "1.0.107"

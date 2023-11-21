@@ -1,0 +1,33 @@
+
+
+[workspace]
+resolver = "2"
+
+members = [
+    "server",
+    "auth",
+]
+
+[workspace.dependencies]
+anyhow = "1.0"
+chrono = "0.4"
+serde = "1"
+serde_json = "1"
+once_cell = "1.18.0"
+
+axum = { version = "0.6", features = ["macros", "form"] }
+axum-extra = { version = "0.8.0", features = ["cookie", "cookie-private", "form"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+sqlx = { version = "0.7", features = [ "runtime-tokio", "tls-rustls", "postgres", "migrate", "uuid", "chrono", "json"] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+
+[profile.dev]
+lto = false
+
+[profile.dev.package."*"]
+opt-level = 2

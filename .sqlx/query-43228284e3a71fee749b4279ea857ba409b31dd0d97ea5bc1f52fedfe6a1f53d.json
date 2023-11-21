@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE sites SET \n        url = COALESCE($2, url),\n        description = COALESCE($3, description),\n        posts_prefix = COALESCE($4, posts_prefix), \n        supported_langs = COALESCE($5, supported_langs)   \n        WHERE account_id = $1\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Text",
+        "Text",
+        "Text",
+        "TextArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "43228284e3a71fee749b4279ea857ba409b31dd0d97ea5bc1f52fedfe6a1f53d"
+}

@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE posts SET \n            title = COALESCE($3, title),\n            content = COALESCE($4, content),\n            slug = COALESCE($5, content)\n        WHERE id = $1 AND account_id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8",
+        "Text",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7086e6b11046839eea166076012c0e52ce37ad8e90cc4fbd1a0329115fa39feb"
+}

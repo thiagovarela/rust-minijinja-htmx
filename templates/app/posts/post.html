@@ -1,0 +1,159 @@
+{% extends "app/_layout.html" %}
+{% block main %}
+	<style>
+		.ProseMirror .is-editor-empty:first-child::before {
+			content: attr(data-placeholder);
+			float: left;
+			color: #ced4da;
+			pointer-events: none;
+			height: 0;
+		}
+
+		.ProseMirror .is-empty::before {
+			content: attr(data-placeholder);
+			float: left;
+			color: #ced4da;
+			pointer-events: none;
+			height: 0;
+		}
+	</style>
+	<script type="module">
+		import { Editor, StarterKit, Placeholder, Document } from "/assets/tiptap.min.js";
+		//import {franc} from 'https://esm.sh/franc-min@6?bundle'
+
+		(function () {
+			const CustomDocument = Document.extend({
+				content: "heading block*",
+			});
+			const titleEl = document.querySelector("#title");
+			const visibleTitleEl = document.querySelector("#visibleTitle");
+			const contentEl = document.querySelector("#content");
+			const editorEl = document.querySelector("#editor");
+
+			// Clear the editor container in case we are navigating using HTMX and some previous content were already in place.
+			let child = editorEl.lastElementChild;
+			while (child) {
+				editorEl.removeChild(child);
+				child = editorEl.lastElementChild;
+			}
+			editor = new Editor({
+				element: editorEl,
+				extensions: [
+					CustomDocument,
+					StarterKit.configure({ document: false }),
+					Placeholder.configure({
+						placeholder: ({ node }) => {
+							if (node.type.name === "heading") {
+								return "Draft";
+							}
+							return "Start typing...";
+						},
+					}),
+				],
+				editorProps: {
+					attributes: {
+						class: "prose dark:prose-invert prose-sm sm:prose-base  m-5 focus:outline-none",
+					},
+				},
+				onUpdate({ editor }) {
+					contentEl.value = editor.getHTML();
+				},
+				onSelectionUpdate({ editor }) {
+					if (editor.isActive("heading")) {
+						const { state } = editor.view;
+						const { from, to } = state.selection;
+						const node = state.doc.nodeAt(0);
+						if (node && node.type.name === "heading") {
+							titleEl.value = node.content?.content?.at(0)?.text ?? "";
+							visibleTitleEl.textContent = titleEl.value;
+						}
+					}
+				},
+			});
+			// Uses a textarea to safely get the initial content from a jinja template.
+			const content = document.querySelector("#tiptap-editor-loaded-content").value;
+			editor.commands.setContent(content, true);
+		})();
+	</script>
+	<form>
+		<header>
+			<div class="md:flex md:items-center md:justify-between">
+				<div class="min-w-0 flex-1">
+					<h2
+						id="visibleTitle"
+						class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+						{{ post.title }}
+					</h2>
+				</div>
+				<div class="mt-4 flex md:ml-4 md:mt-0">
+					<a
+						hx-boost="true"
+						href="./{{ post.id }}/settings/general"
+						class="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+						Settings
+					</a>
+					<button
+						type="button"
+						hx-patch=""
+						hx-swap="none"
+						class="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+						Save
+					</button>
+				</div>
+			</div>
+		</header>
+
+		<div>
+			<input id="content" name="content" type="hidden" />
+			<input id="title" name="title" type="hidden" value="{{ post.title }}" />
+
+			<div>
+				<div class="mt-2 flex flex-wrap items-center justify-between md:px-2 md:py-2">
+					<button type="button" title="Header 2">
+						<i class="ri-h-2 h-4 w-4"></i>
+					</button>
+					<button type="button" title="Header 3">
+						<i class="ri-h-3 h-4 w-4"></i>
+					</button>
+					<button type="button" title="Header 4">
+						<i class="ri-h-4 h-4 w-4"></i>
+					</button>
+					<button type="button" title="Header 5">
+						<i class="ri-h-5 h-4 w-4"></i>
+					</button>
+					<button type="button" title="Bold">
+						<i class="ri-bold h-4 w-4"></i>
+					</button>
+					<button type="button" title="Italic">
+						<i class="ri-italic h-4 w-4"></i>
+					</button>
+					<button type="button" title="Strikethrough">
+						<i class="ri-strikethrough h-4 w-4"></i>
+					</button>
+					<button type="button" title="Quotes">
+						<i class="ri-double-quotes-l"></i>
+					</button>
+					<button type="button" title="Highlight">
+						<i class="ri-sparkling-fill"></i>
+					</button>
+					<button type="button" title="Align Left">
+						<i class="ri-align-left"></i>
+					</button>
+					<button type="button" title="Align Center">
+						<i class="ri-align-center"></i>
+					</button>
+					<button type="button" title="Align Right">
+						<i class="ri-align-right"></i>
+					</button>
+					<button type="button" title="Justify">
+						<i class="ri-align-justify"></i>
+					</button>
+				</div>
+			</div>
+
+			<div id="editor"></div>
+		</div>
+	</form>
+
+	<textarea style="display: none" id="tiptap-editor-loaded-content">{{ post.content|safe }}</textarea>
+{% endblock %}

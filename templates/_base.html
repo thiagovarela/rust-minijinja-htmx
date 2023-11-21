@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="{{ lang|default('en') }}" class="h-full bg-gray-100">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
+
+
+		<link rel="stylesheet" href="/assets/platform.css" /> <!-- should version this-->
+		<link rel="stylesheet" href="/assets/remixicon.css" />
+
+		<meta name="description" content="A template for server side rendered Rust powered web sites" />		
+		<link rel="icon" href="data:," />
+
+		<title>
+			{% block meta_title %}
+				{{ title|default('Platform') }}
+			{% endblock %}
+		</title>
+
+		{% block extra_head %}{% endblock %}
+	</head>
+
+	<body class="h-full">
+		{% block body %}{% endblock %}
+		<script src="/assets/htmx.org@1.9.8.min.js" defer></script>
+		<script src="/assets/alpine@3.13.2.min.js" defer></script>
+	</body>
+</html>

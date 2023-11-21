@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT ak.id, ak.account_id, ak.secret, ak.expires_at\n        FROM account_keys ak\n        INNER JOIN accounts a on (ak.account_id = a.id)\n        WHERE a.subdomain = $1 and (ak.expires_at is null OR ak.expires_at > now())\n        ORDER BY ak.expires_at DESC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "account_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 2,
+        "name": "secret",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "expires_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "cd11a97063b526a184192dd3066b67d5bd2363aaeb2ba41cf0b132de51ae8ae8"
+}

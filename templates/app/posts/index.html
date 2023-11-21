@@ -1,0 +1,75 @@
+{% extends "app/_layout.html" %} {% set title = "Posts" %}
+{% block page_header %}
+	<div class="md:flex md:items-center md:justify-between">
+		<div class="min-w-0 flex-1">
+			<h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Posts</h2>
+		</div>
+		<div class="mt-4 flex md:ml-4 md:mt-0">
+			<form action="./posts/draft" method="post">
+				<button
+					type="submit"
+					class="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+					Create
+				</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block main %}
+	<div class="mt-8 flow-root">
+		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+				<table class="min-w-full divide-y divide-gray-300">
+					<thead>
+						<tr>
+							<th
+								scope="col"
+								class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+								Title
+							</th>
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								Author
+							</th>
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								Published At
+							</th>
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								Created At
+							</th>
+							<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+								<span class="sr-only">Edit</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200">
+						{% for post in posts %}
+							<tr>
+								<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+									<a href="./posts/{{ post.id }}">{{ post.title }}</a>
+								</td>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									{{ post.author.name }}
+								</td>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									{{
+										post.published_at if post.published_at else 'Not
+										Published'
+									}}
+								</td>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									{{ post.created_at|dateformat(format="short") }}
+								</td>
+								<td
+									class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+									<a href="#" class="text-indigo-600 hover:text-indigo-900"
+										>Edit<span class="sr-only">, Lindsay Walton</span></a
+									>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

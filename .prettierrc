@@ -1,0 +1,15 @@
+{
+    "tabWidth": 4,
+    "useTabs": true,
+    "printWidth": 120,
+    "plugins": ["prettier-plugin-jinja-template", "prettier-plugin-tailwindcss"],   
+    "bracketSameLine": true, 
+    "overrides": [
+        {
+            "files": ["*.html"],
+            "options": {
+                "parser": "jinja-template"
+            }            
+        }
+    ] 
+}

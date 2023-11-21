@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO posts(title, content, slug, lang, account_id, author_id)\n            VALUES ('Draft', '', 'draft', 'pt' , $1, $2)\n            RETURNING id             \n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "89cb0cd7027e515947ef42387f99eed232161058b5d68a50dbdf814b9168adef"
+}

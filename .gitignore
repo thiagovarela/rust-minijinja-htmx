@@ -1,0 +1,6 @@
+/target
+/prisma-client/src/prisma.rs
+/node_modules
+.cargo/config.toml
+.env
+fly.toml
